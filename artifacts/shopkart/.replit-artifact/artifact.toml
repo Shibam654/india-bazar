@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "ShopKart"
+description = "A full-featured Indian e-commerce web app inspired by Flipkart and Amazon. Lets Indian shoppers browse products by category, search and filter, add to cart, place orders with COD or UPI, track orders, and manage their account. Sellers can list products. Prices in INR, supports address management and wishlist."
+version = "1.0.0"
+id = "artifacts/shopkart"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 24584
+
+[services.development]
+run = "pnpm --filter @workspace/shopkart run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/shopkart", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/shopkart/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "24584"
+BASE_PATH = "/"
