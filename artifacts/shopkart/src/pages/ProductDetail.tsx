@@ -16,6 +16,8 @@ import { formatINR } from "@/lib/utils";
 import { Star, ShoppingCart, Zap, Heart, Truck, ShieldCheck, ArrowLeft } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
+import { MOCK_PRODUCTS } from "@/data/mockProducts";
+
 export default function ProductDetail() {
   const [match, params] = useRoute("/product/:id");
   const productId = parseInt(params?.id || "0");
@@ -25,14 +27,16 @@ export default function ProductDetail() {
 
   const [activeImage, setActiveImage] = useState(0);
 
-  const { data: product, isLoading } = useGetProduct(productId, { query: { enabled: !!productId } });
+  const mockProduct = MOCK_PRODUCTS.find(p => p.id === productId);
+  const { data: apiProduct, isLoading } = useGetProduct(productId, { query: { enabled: !!productId } });
+  const product = apiProduct || mockProduct;
   const { data: reviews, isLoading: reviewsLoading } = useGetProductReviews(productId, { query: { enabled: !!productId } });
   const { data: summary } = useGetDashboardSummary();
 
   const addToCart = useAddToCart();
   const addToWishlist = useAddToWishlist();
 
-  if (isLoading) {
+  if (isLoading && !product) {
     return (
       <AppLayout>
         <div className="container mx-auto px-4 py-8">
@@ -201,7 +205,7 @@ export default function ProductDetail() {
               <h3 className="font-semibold flex items-center gap-2 mb-3">
                 <Zap className="h-4 w-4 text-green-600" /> Available offers
               </h3>
-              <div className="text-sm flex gap-2"><span className="text-green-600 font-bold tracking-tight shrink-0">Bank Offer</span> <span>5% Unlimited Cashback on ShopKart Axis Bank Credit Card</span></div>
+              <div className="text-sm flex gap-2"><span className="text-green-600 font-bold tracking-tight shrink-0">Bank Offer</span> <span>5% Unlimited Cashback + Instant ₹500 off on India Bazaar SBI / HDFC Credit Card</span></div>
               <div className="text-sm flex gap-2"><span className="text-green-600 font-bold tracking-tight shrink-0">Special Price</span> <span>Get extra 10% off (price inclusive of cashback/coupon)</span></div>
             </div>
 

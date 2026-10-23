@@ -18,15 +18,34 @@ export function Navbar() {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-primary text-primary-foreground shadow-sm">
+    <header className="sticky top-0 z-50 w-full border-b bg-gradient-to-r from-blue-900 via-indigo-900 to-amber-950 text-primary-foreground shadow-md">
+      {/* Festive Diwali Top Announcement Bar */}
+      <div className="bg-gradient-to-r from-amber-600 via-orange-500 to-amber-600 text-white text-xs font-semibold py-1.5 px-4 text-center tracking-wide flex items-center justify-center gap-2 shadow-inner">
+        <span>✨ 🪔</span>
+        <span><strong>SHUBH DIWALI DHAMAKA:</strong> Up to 80% Off Across India Bazaar + Free Express Delivery! Use Code: <strong>DIWALI2026</strong></span>
+        <span>🪔 ✨</span>
+      </div>
+
       <div className="container mx-auto px-4">
         {/* Top Navbar */}
-        <div className="flex h-16 items-center gap-4 sm:gap-8">
+        <div className="flex h-16 items-center gap-3 sm:gap-6">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 flex-shrink-0">
-            <span className="text-2xl font-extrabold tracking-tight text-white flex items-center">
-              Shop<span className="text-accent">Kart</span>
-            </span>
+          <Link href="/" className="flex items-center gap-2.5 flex-shrink-0 group">
+            <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-full overflow-hidden border-2 border-amber-400 shadow-md bg-white p-0.5 flex items-center justify-center group-hover:scale-105 transition-transform">
+              <img
+                src="/india-bazaar-logo.jpg"
+                alt="India Bazaar Logo"
+                className="h-full w-full object-cover rounded-full"
+              />
+            </div>
+            <div className="flex flex-col">
+              <span className="text-xl sm:text-2xl font-black tracking-tight text-white flex items-center leading-none">
+                India <span className="text-amber-400 ml-1">Bazaar</span>
+              </span>
+              <span className="text-[10px] font-bold uppercase tracking-wider text-amber-300/90 flex items-center gap-1">
+                🪔 Diwali Mahotsav
+              </span>
+            </div>
           </Link>
 
           {/* Search Bar - Hidden on mobile, shown on larger screens */}
@@ -85,11 +104,14 @@ export function Navbar() {
           <button className="flex items-center gap-1 hover:text-primary transition-colors">
             <Menu className="h-4 w-4" /> All Categories
           </button>
+          <Link href="/search?category=diwali" className="text-amber-600 font-bold hover:text-amber-700 transition-colors flex items-center gap-1">
+            🪔 Diwali Specials
+          </Link>
           <Link href="/search?category=electronics" className="hover:text-primary transition-colors">Mobiles & Electronics</Link>
-          <Link href="/search?category=fashion" className="hover:text-primary transition-colors">Fashion</Link>
-          <Link href="/search?category=home" className="hover:text-primary transition-colors">Home & Kitchen</Link>
+          <Link href="/search?category=fashion" className="hover:text-primary transition-colors">Ethnic Wear & Fashion</Link>
+          <Link href="/search?category=sweets" className="hover:text-primary transition-colors">Sweets & Dry Fruits</Link>
+          <Link href="/search?category=home" className="hover:text-primary transition-colors">Home & Pooja Decor</Link>
           <Link href="/search?category=appliances" className="hover:text-primary transition-colors">Appliances</Link>
-          <Link href="/search?category=beauty" className="hover:text-primary transition-colors">Beauty & Personal Care</Link>
         </div>
       </div>
     </header>

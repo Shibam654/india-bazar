@@ -62,11 +62,15 @@ export function ProductCard({ product }: ProductCardProps) {
           className="object-contain max-h-full transition-transform group-hover:scale-105 duration-300"
         />
         {/* Deal Badge */}
-        {product.discount >= 50 && (
-          <div className="absolute bottom-0 left-0 bg-accent text-accent-foreground text-xs font-bold px-2 py-1 uppercase tracking-wider">
-            DEAL OF THE DAY
+        {product.discount >= 50 ? (
+          <div className="absolute bottom-0 left-0 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-[11px] font-black px-2.5 py-0.5 rounded-tr-md uppercase tracking-wider shadow-sm flex items-center gap-1">
+            🪔 Diwali Dhamaka
           </div>
-        )}
+        ) : product.isFeatured ? (
+          <div className="absolute bottom-0 left-0 bg-blue-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-tr-md uppercase tracking-wider">
+            Featured
+          </div>
+        ) : null}
       </div>
 
       {/* Content */}

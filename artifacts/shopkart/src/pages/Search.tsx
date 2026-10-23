@@ -3,6 +3,7 @@ import { AppLayout } from "@/components/layout/AppLayout";
 import { useListProducts, useListCategories, ListProductsSortBy } from "@workspace/api-client-react";
 import { ProductCard } from "@/components/ProductCard";
 import { Skeleton } from "@/components/ui/skeleton";
+import { MOCK_PRODUCTS, DIWALI_CATEGORIES } from "@/data/mockProducts";
 import { useLocation, useSearch } from "wouter";
 import { Filter, SlidersHorizontal, ChevronDown, ChevronUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -44,6 +45,34 @@ export default function Search() {
   });
 
   const { data: categories } = useListCategories();
+
+  const filteredMock = MOCK_PRODUCTS.filter((p) => {
+    if (q) {
+      const query = q.toLowerCase();
+      const match =
+        p.name.toLowerCase().includes(query) ||
+        p.description.toLowerCase().includes(query) ||
+        p.brand.toLowerCase().includes(query) ||
+        p.category.toLowerCase().includes(query);
+      if (!match) return false;
+    }
+    if (selectedCategories.length > 0 && selectedCategories[0] !== "diwali" && p.category !== selectedCategories[0]) {
+      return false;
+    }
+    if (p.price < priceRange[0] || p.price > priceRange[1]) {
+      return false;
+    }
+    if (minRating > 0 && p.rating < minRating) {
+      return false;
+    }
+    return true;
+  });
+
+  const displayProducts = (productsData?.products && productsData.products.length > 0)
+    ? productsData.products
+    : filteredMock;
+
+  const displayCategories = (categories && categories.length > 0) ? categories : DIWALI_CATEGORIES;
 
   const handleSortChange = (value: string) => {
     const params = new URLSearchParams(searchString);
@@ -127,7 +156,7 @@ export default function Search() {
               <div className="p-4 border-b">
                 <h3 className="font-semibold text-sm mb-3 uppercase text-muted-foreground">Categories</h3>
                 <div className="space-y-2.5 max-h-48 overflow-y-auto">
-                  {categories?.map((cat) => (
+                  {displayCategories?.map((cat) => (
                     <div key={cat.id} className="flex items-center space-x-2">
                       <Checkbox 
                         id={`cat-${cat.id}`} 
@@ -183,7 +212,7 @@ export default function Search() {
           {/* Main Content - Products */}
           <div className="flex-1">
             <div className="hidden lg:flex justify-between items-center bg-white p-3 border rounded-md shadow-sm mb-6">
-              <span className="text-sm font-medium">Showing {productsData?.products?.length || 0} results</span>
+              <span className="text-sm font-medium">Showing {displayProducts.length} results</span>
               <div className="flex items-center gap-2">
                 <span className="text-sm text-muted-foreground">Sort by:</span>
                 <Select value={sortParam} onValueChange={handleSortChange}>
@@ -201,11 +230,11 @@ export default function Search() {
               </div>
             </div>
 
-            {isLoading ? (
+            {isLoading && displayProducts.length === 0 ? (
               <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
                 {Array(12).fill(0).map((_, i) => <Skeleton key={i} className="h-80 rounded-lg" />)}
               </div>
-            ) : productsData?.products?.length === 0 ? (
+            ) : displayProducts.length === 0 ? (
               <div className="bg-white p-12 flex flex-col items-center justify-center text-center rounded-lg border">
                 <img src="https://placehold.co/200x200/transparent/gray?text=No+Results" alt="No Results" className="w-48 h-48 mb-6" />
                 <h3 className="text-xl font-bold mb-2">No products found</h3>
@@ -214,7 +243,7 @@ export default function Search() {
               </div>
             ) : (
               <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
-                {productsData?.products?.map((product) => (
+                {displayProducts.map((product) => (
                   <ProductCard key={product.id} product={product} />
                 ))}
               </div>
